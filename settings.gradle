@@ -1,0 +1,3 @@
+rootProject.name = 'collect-news'
+
+include("application", "domain")
