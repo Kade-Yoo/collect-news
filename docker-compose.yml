@@ -1,0 +1,83 @@
+version: '1.0'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: collect
+      MYSQL_USER: yhm
+      MYSQL_PASSWORD: 1234
+    networks:
+      - test_network
+
+  rabbitmq:
+    image: "rabbitmq"
+    hostname: "rabbitmq"
+    networks:
+      - test_network
+
+  main:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: main
+    networks:
+      - test_network
+
+  application:
+    build:
+      context: ./application
+      dockerfile: Dockerfile
+    container_name: application
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/collect
+      SPRING_DATASOURCE_USERNAME: yhm
+      SPRING_DATASOURCE_PASSWORD: 1234
+    networks:
+      - test_network
+
+  crawler:
+    build:
+      context: ./crawler
+      dockerfile: Dockerfile
+    container_name: crawler
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mysql
+      - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/collect
+      SPRING_DATASOURCE_USERNAME: yhm
+      SPRING_DATASOURCE_PASSWORD: 1234
+    networks:
+      - test_network
+
+  scheduler:
+    build:
+      context: ./scheduler
+      dockerfile: Dockerfile
+    container_name: scheduler
+    ports:
+      - "8085:8085"
+    depends_on:
+      - mysql
+      - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/collect
+      SPRING_DATASOURCE_USERNAME: yhm
+      SPRING_DATASOURCE_PASSWORD: 1234
+    networks:
+      - test_network
+
+networks:
+  test_network:
