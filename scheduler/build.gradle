@@ -1,0 +1,9 @@
+bootJar.enabled = true
+bootRun.enabled = true
+jar.enabled = false
+
+dependencies {
+    implementation(project(":domain"))
+    implementation('org.springframework.boot:spring-boot-starter-amqp')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+}

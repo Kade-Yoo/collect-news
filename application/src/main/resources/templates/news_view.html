@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>View Results</title>
+</head>
+<body>
+<h2>View Results</h2>
+<table>
+  <thead>
+  <tr>
+    <th>Title</th>
+    <th>Keyword</th>
+    <th>News Site</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="result : ${news}">
+    <td th:text="${news.title}"></td>
+    <td th:text="${news.keyword}"></td>
+    <td th:text="${news.newsSite}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

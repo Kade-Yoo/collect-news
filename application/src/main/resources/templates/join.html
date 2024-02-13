@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="main">
+    <section class="signup">
+      <div class="container">
+        <div class="signup-content">
+          <div class="signup-image">
+            <figure><img src="images/signup-image.jpg" alt="sing up image"></figure>
+          </div>
+          <div class="signup-form">
+            <h2 class="form-title">회원가입</h2>
+            <form id="mainForm" method="POST" class="register-form">
+              <div class="form-group">
+                <label for="email"><i class="zmdi zmdi-email"></i></label>
+                <input type="email" name="email" id="email" placeholder="Email"/>
+              </div>
+              <div class="form-group">
+                <label for="password"><i class="zmdi zmdi-lock"></i></label>
+                <input type="password" name="password" id="password" placeholder="Password"/>
+              </div>
+
+              <div class="form-group form-button">
+                <input type="button" name="signup" id="signup" class="form-submit" onclick="join();" value="가입"/>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+<script>
+  function join() {
+    const data = {
+      email: $('#email').val(),
+      password: $('#password').val(),
+      role: 'ADMIN'
+    };
+
+    $.ajax({
+      type: 'POST',
+      url: '/join',
+      dataType: 'text',
+      contentType:'application/json; charset=utf-8',
+      data: JSON.stringify(data),
+    }).done(function(res){
+      alert("회원 가입 성공");
+      location.href = "/login";
+    }).fail(function (error) {
+      alert("이미 존재하는 회원입니다.");
+    });
+  }
+</script>
+</html>

@@ -1,0 +1,56 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: sa
+    url: jdbc:h2:mem:testdb;MODE=MYSQL
+  jpa:
+    database: h2
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    hikari:
+#      jdbc-url: jdbc:mysql://mysql:3306/collect
+#      username: yhm
+#      password: 1234
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#  jpa:
+#    database: mysql
+#    show-sql: true
+#    database-platform: org.hibernate.dialect.MySQLDialect
+#    hibernate:
+#      ddl-auto: none
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+
+rabbitmq:
+  api:  # rabbit MQ API 호출을 위해 작성
+    port: 8081
+    queue: /api/queues
+    queue-detail: /api/queues/
+  queue1:
+    name: collect-mq1
+    exchange: collect-exchange
+  queue2:
+    name: collect-mq2
+    exchange: collect-exchange
+  queue3:
+    name: collect-mq3
+    exchange: collect-exchange
+  routing:
+    key:  # exchange
+      queue1: collect-mq1
+      queue2: collect-mq2
+      queue3: collect-mq3

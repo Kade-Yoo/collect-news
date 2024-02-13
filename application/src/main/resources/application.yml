@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    group:
+      default:
+        - domain-local
+        - crawler-local
+      local:
+        - domain-local
+        - crawler-local

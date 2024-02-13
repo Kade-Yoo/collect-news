@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <title>Settings</title>
+</head>
+<body>
+<h2>News Settings</h2>
+  <form action="/search-keyword" method="post">
+    <div>
+      <label for="keyword">Keyword:</label>
+      <input type="text" id="keyword" name="keyword">
+    </div>
+    <div>
+      <label for="site">News Site:</label>
+      <select id="site" name="site">
+        <option value="naver">Naver</option>
+        <option value="daum">Daum</option>
+        <option value="google">Google</option>
+      </select>
+    </div>
+    <button id="save" type="button" onclick="setting()">Save Settings</button>
+  </form>
+</body>
+</html>
+
+<script th:inline="javascript">
+  function setting() {
+    const data = {
+      keyword: $('#keyword').val(),
+      site: $('#site').val()
+    };
+
+    $.ajax({
+      url: '/settings',
+      type: 'POST',
+      data: JSON.stringify(data),
+      contentType:'application/json; charset=utf-8',
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader("Content-type","application/json");
+        xhr.setRequestHeader("Authorization", getCookie("Authorization"));
+      },
+      success: function(response) {
+        alert('저장되었습니다.');
+        window.location.href = '/view/news';
+      },
+      error: function(xhr, status, error) {
+        alert(error.detail);
+      }
+    });
+  }
+
+  function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+</script>
