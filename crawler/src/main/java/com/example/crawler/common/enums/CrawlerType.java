@@ -12,6 +12,9 @@ public enum CrawlerType {
     NAVER("naver"),
     DAUM("daum"),
     GOOGLE("google"),
+    YES24("yes24"),
+    KYOBO("kyobo"),
+    ALADIN("aladin"),
     NONE("");
 
     private final String siteName;
