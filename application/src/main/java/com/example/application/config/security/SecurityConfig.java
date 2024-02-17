@@ -2,7 +2,6 @@ package com.example.application.config.security;
 
 import com.example.application.config.jwt.JwtAuthorizationFilter;
 import com.example.application.config.jwt.JwtProvider;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -20,10 +18,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
+    private final CustomAuthenticationProvider authenticationProvider;
 
     @Autowired
-    public SecurityConfig(JwtProvider jwtProvider) {
+    public SecurityConfig(JwtProvider jwtProvider, CustomAuthenticationProvider authenticationProvider) {
         this.jwtProvider = jwtProvider;
+        this.authenticationProvider = authenticationProvider;
     }
 
     @Bean
@@ -42,13 +42,15 @@ public class SecurityConfig {
                         new JwtAuthorizationFilter(jwtProvider),
                         UsernamePasswordAuthenticationFilter.class
                 )
+                .authenticationProvider(authenticationProvider)
                 .build();
     }
 
-    @Bean
-    public InitializingBean initializingBean() {
-        // @Async(비동기) 호출인 상황에서 새로운 스레드가 생성되었을 때 SecurityContext를 만들어 줄지 선택하는 전략
-        // MODE_INHERITABLETHREADLOCAL로 했을 때 어디서 동작이 안되는걸까? Forbidden이 뜨는거보면 중간 필터에서 안되는 것 같은데.. 뭐지
-        return () -> SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
-    }
+//    @Bean
+//    public InitializingBean initializingBean() {
+//        // @Async(비동기) 호출인 상황에서 새로운 스레드가 생성되었을 때 SecurityContext를 만들어 줄지 선택하는 전략
+//        // MODE_INHERITABLETHREADLOCAL로 했을 때 어디서 동작이 안되는걸까? Forbidden이 뜨는거보면 중간 필터에서 안되는 것 같은데.. 뭐지
+////        return () -> SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
+//        return () -> SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_THREADLOCAL);
+//    }
 }

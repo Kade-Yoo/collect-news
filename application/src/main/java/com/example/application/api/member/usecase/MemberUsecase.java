@@ -23,8 +23,7 @@ public class MemberUsecase {
         return members.stream().map(MemberResponse::of).toList();
     }
 
-    public void getMember(Long id) {
-        MemberResponse of = MemberResponse.of(memberService.getMemberById(id));
-        System.out.println("of = " + of.getUsername());
+    public MemberResponse getMember(Long id) {
+        return MemberResponse.of(memberService.getMemberById(id));
     }
 }
